@@ -27,7 +27,7 @@ require (
 	github.com/integr8ly/application-monitoring-operator v1.4.0
 	github.com/integr8ly/cloud-resource-operator v0.23.1-0.20210118104111-b5c5799f313c
 	github.com/integr8ly/grafana-operator v2.0.0+incompatible
-	github.com/integr8ly/grafana-operator/v3 v3.6.0
+	github.com/integr8ly/grafana-operator/v3 v3.9.0
 	github.com/integr8ly/keycloak-client v0.1.3-0.20210125112511-1972ece81982
 	github.com/keycloak/keycloak-operator v0.0.0-20210115090828-e5d4686bb8a4
 	github.com/onsi/ginkgo v1.15.0
@@ -58,6 +58,7 @@ require (
 replace (
 	github.com/coreos/prometheus-operator => github.com/coreos/prometheus-operator v0.38.3
 	github.com/go-logr/logr => github.com/go-logr/logr v0.1.0
+	github.com/keycloak/keycloak-operator => github.com/briangallagher/keycloak-operator v0.0.0-20210319113030-69b57320e527
 	github.com/openshift/api => github.com/openshift/api v0.0.0-20210105115604-44119421ec6b
 	github.com/operator-framework/operator-sdk => github.com/operator-framework/operator-sdk v1.2.0
 	sigs.k8s.io/controller-runtime => sigs.k8s.io/controller-runtime v0.6.3

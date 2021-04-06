@@ -1908,7 +1908,7 @@ func (r *Reconciler) getKeycloakClientSpec(id, clientSecret string) keycloak.Key
 			},
 			StandardFlowEnabled: true,
 			RootURL:             fmt.Sprintf("https://3scale-admin.%s", r.installation.Spec.RoutingSubdomain),
-			FullScopeAllowed:    &fullScopeAllowed,
+			FullScopeAllowed:    fullScopeAllowed,
 			Access: map[string]bool{
 				"view":      true,
 				"configure": true,

@@ -400,7 +400,7 @@ github.com/integr8ly/cloud-resource-operator/pkg/providers/aws
 github.com/integr8ly/cloud-resource-operator/pkg/resources
 # github.com/integr8ly/grafana-operator v2.0.0+incompatible
 github.com/integr8ly/grafana-operator/pkg/apis/integreatly/v1alpha1
-# github.com/integr8ly/grafana-operator/v3 v3.6.0
+# github.com/integr8ly/grafana-operator/v3 v3.9.0
 github.com/integr8ly/grafana-operator/v3/pkg/apis/integreatly/v1alpha1
 # github.com/integr8ly/keycloak-client v0.1.3-0.20210125112511-1972ece81982
 github.com/integr8ly/keycloak-client/pkg/common
@@ -408,7 +408,7 @@ github.com/integr8ly/keycloak-client/pkg/common
 github.com/jmespath/go-jmespath
 # github.com/json-iterator/go v1.1.10
 github.com/json-iterator/go
-# github.com/keycloak/keycloak-operator v0.0.0-20210115090828-e5d4686bb8a4
+# github.com/keycloak/keycloak-operator v0.0.0-20210115090828-e5d4686bb8a4 => github.com/briangallagher/keycloak-operator v0.0.0-20210319113030-69b57320e527
 github.com/keycloak/keycloak-operator/pkg/apis/keycloak/v1alpha1
 github.com/keycloak/keycloak-operator/pkg/common
 github.com/keycloak/keycloak-operator/pkg/k8sutil

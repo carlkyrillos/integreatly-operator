@@ -513,7 +513,7 @@ func getKeycloakClientSpec(cheURL string) keycloak.KeycloakClientSpec {
 			WebOrigins:                []string{cheURL, fmt.Sprintf("%s/*", cheURL)},
 			StandardFlowEnabled:       true,
 			RootURL:                   cheURL,
-			FullScopeAllowed:          &fullScopeAllowed,
+			FullScopeAllowed:          fullScopeAllowed,
 			Access: map[string]bool{
 				"view":      true,
 				"configure": true,

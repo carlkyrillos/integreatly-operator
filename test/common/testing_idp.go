@@ -473,7 +473,7 @@ func createKeycloakClient(ctx context.Context, client dynclient.Client, oauthURL
 				},
 				StandardFlowEnabled:       true,
 				DirectAccessGrantsEnabled: true,
-				FullScopeAllowed:          &fullScopeAllowed,
+				FullScopeAllowed:          fullScopeAllowed,
 				ProtocolMappers: []v1alpha1.KeycloakProtocolMapper{
 					{
 						Config: map[string]string{

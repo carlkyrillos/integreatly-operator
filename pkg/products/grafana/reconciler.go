@@ -234,7 +234,6 @@ func (r *Reconciler) reconcileGrafanaDashboards(ctx context.Context, serverClien
 		graphQueries, dashboardVariables := buildGrafanaDashboardStrings(softLimits)
 		grafanaDB.Spec = grafanav1alpha1.GrafanaDashboardSpec{
 			Json: getCustomerMonitoringGrafanaRateLimitJSON(graphQueries, dashboardVariables, fmt.Sprintf("%d", limitConfig.RequestsPerUnit)),
-			Name: rateLimitDashBoardName,
 		}
 		return nil
 	})
