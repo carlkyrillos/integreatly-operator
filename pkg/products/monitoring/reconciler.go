@@ -565,10 +565,6 @@ func (r *Reconciler) reconcileGrafanaDashboards(ctx context.Context, serverClien
 
 func (r *Reconciler) reconcileComponents(ctx context.Context, serverClient k8sclient.Client, isMultiAZCluster bool) (integreatlyv1alpha1.StatusPhase, error) {
 	r.Log.Info("Reconciling Monitoring Components")
-
-	var serviceAccountAnnotations = map[string]string{}
-	serviceAccountAnnotations["serviceaccounts.openshift.io/oauth-redirectreference.primary"] = "{\"kind\":\"OAuthRedirectReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"Route\",\"name\":\"grafana-route\"}}"
-
 	m := &monitoring.ApplicationMonitoring{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      defaultMonitoringName,
@@ -592,7 +588,6 @@ func (r *Reconciler) reconcileComponents(ctx context.Context, serverClient k8scl
 			AlertmanagerInstanceNamespaces:   r.Config.GetOperatorNamespace(),
 			PrometheusInstanceNamespaces:     r.Config.GetOperatorNamespace(),
 			SelfSignedCerts:                  r.installation.Spec.SelfSignedCerts,
-			ServiceAccount
 		}
 
 		if isMultiAZCluster && r.installation.Spec.Type == string(integreatlyv1alpha1.InstallationTypeManagedApi) {
@@ -610,22 +605,6 @@ func (r *Reconciler) reconcileComponents(ctx context.Context, serverClient k8scl
 	if err != nil {
 		return integreatlyv1alpha1.PhaseFailed, fmt.Errorf("failed to create/update applicationmonitoring custom resource: %w", err)
 	}
-
-	/*
-	Add missing annotation to grafana-service-account
-	serviceaccounts.openshift.io/oauth-redirectreference.primary: >-
-	      {"kind":"OAuthRedirectReference","apiVersion":"v1","reference":{"kind":"Route","name":"grafana-route"}}
-
-	1. Get service account using client.get
-	2. CreateOrUpdate on the service account
-			Create annotation
-	3. Test by verifying you can log into Grafana
-
-
-	var serviceAccountAnnotations = map[string]string{}
-	serviceAccountAnnotations["serviceaccounts.openshift.io/oauth-redirectreference.primary"] = "{\"kind\":\"OAuthRedirectReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"Route\",\"name\":\"grafana-route\"}}"
-
-	*/
 
 	r.Log.Infof("Operation result", l.Fields{"monitoring": m.Name, "result": or})
 	return integreatlyv1alpha1.PhaseCompleted, nil
