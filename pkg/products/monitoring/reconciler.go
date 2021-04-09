@@ -606,6 +606,28 @@ func (r *Reconciler) reconcileComponents(ctx context.Context, serverClient k8scl
 		return integreatlyv1alpha1.PhaseFailed, fmt.Errorf("failed to create/update applicationmonitoring custom resource: %w", err)
 	}
 
+	r.Log.Info("Reconciling Grafana ServiceAccount")
+	grafanaServiceAccount := &corev1.ServiceAccount{
+		ObjectMeta: metav1.ObjectMeta{
+			Name:      "grafana-serviceaccount",
+			Namespace: r.Config.GetOperatorNamespace(),
+		},
+	}
+
+	or, err = controllerutil.CreateOrUpdate(ctx, serverClient, grafanaServiceAccount, func() error {
+		serviceAccountAnnotations := grafanaServiceAccount.ObjectMeta.GetAnnotations()
+		if serviceAccountAnnotations == nil {
+			serviceAccountAnnotations = map[string]string{}
+		}
+		serviceAccountAnnotations["serviceaccounts.openshift.io/oauth-redirectreference.primary"] = "{\"kind\":\"OAuthRedirectReference\",\"apiVersion\":\"v1\",\"reference\":{\"kind\":\"Route\",\"name\":\"grafana-route\"}}"
+		grafanaServiceAccount.ObjectMeta.SetAnnotations(serviceAccountAnnotations)
+
+		return nil
+	})
+	if err != nil {
+		return integreatlyv1alpha1.PhaseFailed, fmt.Errorf("failed to create/update grafana service account: %w", err)
+	}
+
 	r.Log.Infof("Operation result", l.Fields{"monitoring": m.Name, "result": or})
 	return integreatlyv1alpha1.PhaseCompleted, nil
 }
