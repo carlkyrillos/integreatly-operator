@@ -603,6 +603,7 @@ func (r *Reconciler) reconcileComponents(ctx context.Context, serverClient k8scl
 		return nil
 	})
 	if err != nil {
+		r.Log.Error("Failed reconciling AMO CR", err)
 		return integreatlyv1alpha1.PhaseFailed, fmt.Errorf("failed to create/update applicationmonitoring custom resource: %w", err)
 	}
 
@@ -625,6 +626,7 @@ func (r *Reconciler) reconcileComponents(ctx context.Context, serverClient k8scl
 		return nil
 	})
 	if err != nil {
+		r.Log.Error("Failed reconciling grafana service account", err)
 		return integreatlyv1alpha1.PhaseFailed, fmt.Errorf("failed to create/update grafana service account: %w", err)
 	}
 
