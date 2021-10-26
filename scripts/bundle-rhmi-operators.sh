@@ -37,16 +37,7 @@ start() {
   if [ BUNDLE_ONLY ]; then
     generate_bundles
   else
-    clean_up
-    create_work_area
-    copy_bundles
-    check_upgrade_install
-    generate_bundles
-    generate_index
-    if [ "$CATALOG_SOURCE_INSTALL" = true ] ; then
-      create_catalog_source
-    fi
-    clean_up
+    echo "not generating budles"
   fi
 }
 
@@ -98,9 +89,9 @@ generate_bundles() {
       opm alpha bundle generate -d . --channels $CHANNEL \
         --package integreatly --output-dir bundle \
         --default $CHANNEL
-      docker build -f bundle.Dockerfile -t $REG/$ORG/${OLM_TYPE}-bundle:$VERSION .
-      docker push $REG/$ORG/${OLM_TYPE}-bundle:$VERSION
-      operator-sdk bundle validate $REG/$ORG/${OLM_TYPE}-bundle:$VERSION
+      # docker build -f bundle.Dockerfile -t $REG/$ORG/${OLM_TYPE}-bundle:$VERSION .
+      # docker push $REG/$ORG/${OLM_TYPE}-bundle:$VERSION
+      # operator-sdk bundle validate $REG/$ORG/${OLM_TYPE}-bundle:$VERSION
       cd ..
     fi
   done
