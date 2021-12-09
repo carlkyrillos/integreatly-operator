@@ -307,6 +307,8 @@ if [[ "${OLM_TYPE}" == "managed-api-service" ]]; then
  set_related_images
 fi
 
+mv bundle.Dockerfile bundles/$OLM_TYPE/$VERSION
+
 # Reset the project name
 yq e -i ".projectName=\"$current_project_name\"" PROJECT
 
