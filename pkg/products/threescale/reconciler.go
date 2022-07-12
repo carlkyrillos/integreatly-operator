@@ -1531,8 +1531,37 @@ func (r *Reconciler) reconcile3scaleMultiTenancy(ctx context.Context, serverClie
 				)
 			}
 
+			// Get the account's corresponding KeycloakUser for later verification
+			kcUser, err := r.getKeycloakUserFromAccount(serverClient, account.OrgName)
+			if err != nil {
+				r.log.Errorf("Failed to get KeycloakUser for tenant account",
+					l.Fields{
+						"tenantAccountId":    account.Id,
+						"tenantAccountName":  account.Name,
+						"tenantAccountState": account.State,
+					},
+					err,
+				)
+				continue
+			}
+
+			// Get the account's corresponding KeycloakClient for later verification
+			kcClient, err := r.getKeycloakClientFromAccount(serverClient, account.OrgName)
+			if err != nil {
+				r.log.Errorf("Failed to get KeycloakClient for tenant account",
+					l.Fields{
+						"tenantAccountId":    account.Id,
+						"tenantAccountName":  account.Name,
+						"tenantAccountState": account.State,
+					},
+					err,
+				)
+				continue
+			}
+
 			// Only add the ssoReady annotation if the auth provider was successfully added to the managed tenant account
-			if err == nil {
+			// and the tenant account's corresponding KeycloakUser and KeycloakClient CR's are ready, otherwise continue to next account
+			if err == nil && kcUser.Status.Phase == keycloak.UserPhaseReconciled && kcClient.Status.Ready {
 				// Add ssoReady annotation to the user CR associated with the tenantAccount's OrgName
 				// This is required by apimanagementtenant_controller so it can finish reconciling the APIManagementTenant CR
 				err = r.addSSOReadyAnnotationToUser(ctx, serverClient, account.OrgName)
@@ -1544,6 +1573,8 @@ func (r *Reconciler) reconcile3scaleMultiTenancy(ctx context.Context, serverClie
 						err,
 					)
 				}
+			} else {
+				continue
 			}
 
 			err = r.reconcileDashboardLink(ctx, serverClient, account.OrgName, account.AdminBaseURL)
@@ -3097,4 +3128,34 @@ func (r *Reconciler) addSSOReadyAnnotationToUser(ctx context.Context, client k8s
 	}
 
 	return nil
+}
+
+func (r *Reconciler) getKeycloakUserFromAccount(client k8sclient.Client, accountName string) (*keycloak.KeycloakUser, error) {
+	kcUserList := &keycloak.KeycloakUserList{}
+	if err := client.List(context.TODO(), kcUserList, k8sclient.InNamespace(fmt.Sprintf("%srhsso", r.installation.Spec.NamespacePrefix))); err != nil {
+		return nil, fmt.Errorf("failed to get list of KeycloakUsers, err: %v", err)
+	}
+	for _, kcUser := range kcUserList.Items {
+		if kcUser.Spec.User.UserName == accountName {
+			return &kcUser, nil
+		}
+	}
+
+	// If the KeycloakUser wasn't found return an error
+	return nil, fmt.Errorf("failed to find the KeycloakUser for %v", accountName)
+}
+
+func (r *Reconciler) getKeycloakClientFromAccount(client k8sclient.Client, accountName string) (*keycloak.KeycloakClient, error) {
+	kcClientList := &keycloak.KeycloakClientList{}
+	if err := client.List(context.TODO(), kcClientList, k8sclient.InNamespace(fmt.Sprintf("%srhsso", r.installation.Spec.NamespacePrefix))); err != nil {
+		return nil, fmt.Errorf("failed to get list of KeycloakClients, err: %v", err)
+	}
+	for _, kcClient := range kcClientList.Items {
+		if strings.Contains(kcClient.Name, accountName) {
+			return &kcClient, nil
+		}
+	}
+
+	// If the KeycloakClient wasn't found return an error
+	return nil, fmt.Errorf("failed to find the KeycloakClient for %v", accountName)
 }
