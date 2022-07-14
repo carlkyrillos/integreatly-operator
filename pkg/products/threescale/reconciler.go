@@ -1529,6 +1529,7 @@ func (r *Reconciler) reconcile3scaleMultiTenancy(ctx context.Context, serverClie
 					},
 					err,
 				)
+				continue
 			}
 
 			// Get the account's corresponding KeycloakUser for later verification
@@ -1559,11 +1560,23 @@ func (r *Reconciler) reconcile3scaleMultiTenancy(ctx context.Context, serverClie
 				continue
 			}
 
-			// Only add the ssoReady annotation if the auth provider was successfully added to the managed tenant account
-			// and the tenant account's corresponding KeycloakUser and KeycloakClient CR's are ready, otherwise continue to next account
-			if err == nil && kcUser.Status.Phase == keycloak.UserPhaseReconciled && kcClient.Status.Ready {
+			err = r.reconcileDashboardLink(ctx, serverClient, account.OrgName, account.AdminBaseURL)
+			if err != nil {
+				r.log.Errorf("Error reconciling console link for the tenant account",
+					l.Fields{
+						"tenantAccountId":   account.Id,
+						"tenantAccountName": account.Name,
+					},
+					err,
+				)
+				continue
+			}
+
+			// Only add the ssoReady annotation if the tenant account's corresponding KeycloakUser and KeycloakClient CR's are ready.
+			// If not, continue to next account.
+			if kcUser.Status.Phase == keycloak.UserPhaseReconciled && kcClient.Status.Ready == true {
 				// Add ssoReady annotation to the user CR associated with the tenantAccount's OrgName
-				// This is required by apimanagementtenant_controller so it can finish reconciling the APIManagementTenant CR
+				// This is required by the apimanagementtenant_controller so it can finish reconciling the APIManagementTenant CR
 				err = r.addSSOReadyAnnotationToUser(ctx, serverClient, account.OrgName)
 				if err != nil {
 					r.log.Errorf("Error adding ssoReady annotation for the user associated with the tenant account org",
@@ -1575,17 +1588,6 @@ func (r *Reconciler) reconcile3scaleMultiTenancy(ctx context.Context, serverClie
 				}
 			} else {
 				continue
-			}
-
-			err = r.reconcileDashboardLink(ctx, serverClient, account.OrgName, account.AdminBaseURL)
-			if err != nil {
-				r.log.Errorf("Error reconciling console link for the tenant account",
-					l.Fields{
-						"tenantAccountId":   account.Id,
-						"tenantAccountName": account.Name,
-					},
-					err,
-				)
 			}
 
 			tenantsCreated.Data[string(account.OrgName)] = "true"
