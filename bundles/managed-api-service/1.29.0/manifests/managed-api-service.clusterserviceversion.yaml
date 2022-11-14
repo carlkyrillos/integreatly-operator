@@ -506,8 +506,6 @@ spec:
                     command:
                       - rhmi-operator
                     env:
-                      - name: INSTALLATION_TYPE
-                        value: managed-api
                       - name: WATCH_NAMESPACE
                         valueFrom:
                           fieldRef:
@@ -522,6 +520,8 @@ spec:
                         value: "true"
                       - name: LOG_LEVEL
                         value: info
+                      - name: INSTALLATION_TYPE
+                        value: managed-api
                       - name: REBALANCE_PODS
                         value: "true"
                       - name: ALERT_SMTP_FROM
@@ -739,7 +739,7 @@ spec:
   maturity: alpha
   provider:
     name: rhoam
-  replaces: managed-api-service.v1.28.0
+  replaces: managed-api-service.v1.30.0
   selector:
     matchLabels:
       alm-owner-rhoam: rhoam-operator
