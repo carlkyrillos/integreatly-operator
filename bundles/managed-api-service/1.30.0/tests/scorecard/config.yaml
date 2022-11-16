@@ -2,7 +2,6 @@ apiVersion: scorecard.operatorframework.io/v1alpha3
 kind: Configuration
 metadata:
   name: config
-serviceaccount: rhoam-test-runner
 stages:
 - parallel: true
   tests:
@@ -13,9 +12,6 @@ stages:
     labels:
       suite: basic
       test: basic-check-spec-test
-    storage:
-      spec:
-        mountPath: {}
   - entrypoint:
     - scorecard-test
     - olm-bundle-validation
@@ -23,9 +19,6 @@ stages:
     labels:
       suite: olm
       test: olm-bundle-validation-test
-    storage:
-      spec:
-        mountPath: {}
   - entrypoint:
     - scorecard-test
     - olm-crds-have-validation
@@ -33,9 +26,6 @@ stages:
     labels:
       suite: olm
       test: olm-crds-have-validation-test
-    storage:
-      spec:
-        mountPath: {}
   - entrypoint:
     - scorecard-test
     - olm-crds-have-resources
@@ -43,9 +33,6 @@ stages:
     labels:
       suite: olm
       test: olm-crds-have-resources-test
-    storage:
-      spec:
-        mountPath: {}
   - entrypoint:
     - scorecard-test
     - olm-spec-descriptors
@@ -53,9 +40,6 @@ stages:
     labels:
       suite: olm
       test: olm-spec-descriptors-test
-    storage:
-      spec:
-        mountPath: {}
   - entrypoint:
     - scorecard-test
     - olm-status-descriptors
@@ -63,9 +47,6 @@ stages:
     labels:
       suite: olm
       test: olm-status-descriptors-test
-    storage:
-      spec:
-        mountPath: {}
   - entrypoint:
     - entrypoint
     - 01-happy-path
@@ -75,10 +56,6 @@ stages:
       cluster-size: small
       phase: msp-main
       test: happy-path
-    storage:
-      spec:
-        mountPath:
-          path: logs/artifacts
   - entrypoint:
     - entrypoint
     - 02-scalability
@@ -88,10 +65,3 @@ stages:
       cluster-size: medium
       phase: msp-main
       test: scalability
-    storage:
-      spec:
-        mountPath:
-          path: logs/artifacts
-storage:
-  spec:
-    mountPath: {}
