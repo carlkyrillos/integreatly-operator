@@ -1,7 +1,7 @@
 package envoy
 
 import (
-	envoy "github.com/3scale-ops/marin3r/pkg/envoy"
+	envoy "github.com/3scale-ops/marin3r/pkg/apishelper"
 	resource_v3 "github.com/envoyproxy/go-control-plane/pkg/resource/v3"
 )
 

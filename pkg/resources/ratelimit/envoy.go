@@ -5,16 +5,14 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/3scale-ops/marin3r/pkg/envoy"
-	l "github.com/integr8ly/integreatly-operator/pkg/resources/logger"
-
+	marin3rapishelper "github.com/3scale-ops/marin3r/pkg/apishelper"
 	integreatlyv1alpha1 "github.com/integr8ly/integreatly-operator/apis/v1alpha1"
+	l "github.com/integr8ly/integreatly-operator/pkg/resources/logger"
 	appsv1 "github.com/openshift/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	k8serr "k8s.io/apimachinery/pkg/api/errors"
 	k8sTypes "k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
-
 	k8sclient "sigs.k8s.io/controller-runtime/pkg/client"
 )
 
@@ -87,13 +85,13 @@ func (envoyProxy *envoyProxyServer) patchDeploymentConfig(dcName, namespace, env
 			"marin3r.3scale.net/ports":             envoyPort,
 			"marin3r.3scale.net/envoy-image":       EnvoyImage,
 			"marin3r.3scale.net/status":            "enabled",
-			"marin3r.3scale.net/envoy-api-version": envoy.APIv3.String(),
+			"marin3r.3scale.net/envoy-api-version": marin3rapishelper.APIv3.String(),
 		})
 
 	dc.Spec.Template.Labels["marin3r.3scale.net/status"] = "enabled"
 	dc.Spec.Template.Annotations["marin3r.3scale.net/node-id"] = envoyNodeID
 	dc.Spec.Template.Annotations["marin3r.3scale.net/ports"] = envoyPort
-	dc.Spec.Template.Annotations["marin3r.3scale.net/envoy-api-version"] = envoy.APIv3.String()
+	dc.Spec.Template.Annotations["marin3r.3scale.net/envoy-api-version"] = marin3rapishelper.APIv3.String()
 	dc.Spec.Template.Annotations["marin3r.3scale.net/envoy-image"] = EnvoyImage
 	dc.Spec.Template.Annotations["marin3r.3scale.net/resources.requests.cpu"] = "190m"
 	dc.Spec.Template.Annotations["marin3r.3scale.net/resources.requests.memory"] = "90Mi"

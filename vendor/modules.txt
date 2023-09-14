@@ -42,11 +42,11 @@ cloud.google.com/go/storage/internal/apiv2/stubs
 ## explicit; go 1.19
 github.com/3scale-ops/basereconciler/status
 github.com/3scale-ops/basereconciler/util
-# github.com/3scale-ops/marin3r v0.12.2
+# github.com/3scale-ops/marin3r v0.12.2 => /home/ckyrillo/Documents/marin3r
 ## explicit; go 1.19
 github.com/3scale-ops/marin3r/apis/marin3r/v1alpha1
 github.com/3scale-ops/marin3r/apis/operator.marin3r/v1alpha1
-github.com/3scale-ops/marin3r/pkg/envoy
+github.com/3scale-ops/marin3r/pkg/apishelper
 github.com/3scale-ops/marin3r/pkg/envoy/container/defaults
 github.com/3scale-ops/marin3r/pkg/envoy/protos/v3
 github.com/3scale-ops/marin3r/pkg/envoy/resources
@@ -1420,3 +1420,4 @@ sigs.k8s.io/structured-merge-diff/v4/value
 sigs.k8s.io/yaml
 # github.com/openshift/api => github.com/openshift/api v0.0.0-20210831091943-07e756545ac1
 # github.com/grafana-operator/grafana-operator/v4 => github.com/grafana-operator/grafana-operator/v4 v4.2.0
+# github.com/3scale-ops/marin3r => /home/ckyrillo/Documents/marin3r

@@ -151,3 +151,6 @@ replace github.com/openshift/api => github.com/openshift/api v0.0.0-202108310919
 
 // Required until the following jira is resolved - https://issues.redhat.com/browse/MGDAPI-4996
 replace github.com/grafana-operator/grafana-operator/v4 => github.com/grafana-operator/grafana-operator/v4 v4.2.0
+
+// TODO: Remove this when finished testing
+replace github.com/3scale-ops/marin3r => /home/ckyrillo/Documents/marin3r

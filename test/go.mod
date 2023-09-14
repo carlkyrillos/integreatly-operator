@@ -160,5 +160,8 @@ replace github.com/openshift/api => github.com/openshift/api v0.0.0-202108310919
 // Required until OO dependency is removed or; OO bumps their client-go - Jira: https://issues.redhat.com/browse/MGDAPI-4954
 replace k8s.io/client-go => k8s.io/client-go v0.26.3
 
+// TODO: Remove this when finished testing
+replace github.com/3scale-ops/marin3r => /home/ckyrillo/Documents/marin3r
+
 // Required to import parent module - cannot import remotely as parent module was importing test directoy
 replace github.com/integr8ly/integreatly-operator => ../

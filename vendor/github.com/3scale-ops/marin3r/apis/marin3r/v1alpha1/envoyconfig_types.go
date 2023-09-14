@@ -18,7 +18,7 @@ package v1alpha1
 
 import (
 	reconcilerutil "github.com/3scale-ops/basereconciler/util"
-	"github.com/3scale-ops/marin3r/pkg/envoy"
+	"github.com/3scale-ops/marin3r/pkg/apishelper"
 	envoy_serializer "github.com/3scale-ops/marin3r/pkg/envoy/serializer"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -70,7 +70,7 @@ type EnvoyConfigSpec struct {
 	// +kubebuilder:validation:Enum=v3
 	// +operator-sdk:csv:customresourcedefinitions:type=spec
 	// +optional
-	EnvoyAPI *envoy.APIVersion `json:"envoyAPI,omitempty"`
+	EnvoyAPI *apishelper.APIVersion `json:"envoyAPI,omitempty"`
 	// EnvoyResources holds the different types of resources suported by the envoy discovery service
 	// DEPRECATED. Use the `resources` field instead.
 	// +operator-sdk:csv:customresourcedefinitions:type=spec
@@ -147,11 +147,11 @@ type EnvoyConfig struct {
 }
 
 // GetEnvoyAPIVersion returns envoy's API version for the EnvoyConfigRevision
-func (ec *EnvoyConfig) GetEnvoyAPIVersion() envoy.APIVersion {
+func (ec *EnvoyConfig) GetEnvoyAPIVersion() apishelper.APIVersion {
 	if ec.Spec.EnvoyAPI == nil {
-		return envoy.APIv3
+		return apishelper.APIv3
 	}
-	return envoy.APIVersion(*ec.Spec.EnvoyAPI)
+	return apishelper.APIVersion(*ec.Spec.EnvoyAPI)
 }
 
 // GetSerialization returns the encoding of the envoy resources.
