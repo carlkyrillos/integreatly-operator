@@ -40,12 +40,20 @@ fi
 
 echo "Using kustomize path: $KUSTOMIZE"
 
+echo "####"
+echo "$(which gofmt)"
+echo "#"
+echo "$(whereis gofmt)"
+echo "#####"
+
 # Path to gofmt
 if [[ -z $GOROOT ]]; then
-  GOFMT="gofmt"
+  GOFMT="/usr/local/go/bin/gofmt"
 else
   GOFMT="$GOROOT/bin/gofmt"
 fi
+
+echo "Using gofmt path: $GOFMT"
 
 # The base CSV is used to generate the final CSV by combining it with the other operator
 # manifests. In operator-sdk v1.2.0, the replaces field of the new CSV is set from
